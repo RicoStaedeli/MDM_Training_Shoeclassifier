@@ -1,5 +1,6 @@
 package ch.zhaw.mdm.staedric.training;
 
+import ai.djl.MalformedModelException;
 import ai.djl.Model;
 import ai.djl.ModelException;
 import ai.djl.inference.Predictor;
@@ -12,27 +13,29 @@ import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import javax.imageio.ImageIO;
 
 /** Uses the model to generate a prediction called an inference */
 public class Inference {
 
-    public static void main(String[] args) throws ModelException, TranslateException, IOException {
+    public Inference(){
+
+    }
+
+    public Classifications predict(byte[] image) throws IOException, ModelException, TranslateException {
+        InputStream is = new ByteArrayInputStream(image);
+        BufferedImage bi = ImageIO.read(is);
+        Image img = ImageFactory.getInstance().fromImage(bi);
+
         // the location where the model is saved
         Path modelDir = Paths.get("models");
-
-        // the path of image to classify
-        String imageFilePath;
-        if (args.length == 0) {
-            imageFilePath = "ut-zap50k-images-square/Sandals/Athletic/Keen/7596238.3.jpg";
-        } else {
-            imageFilePath = args[0];
-        }
-
-        // Load the image file from the path
-        Image img = ImageFactory.getInstance().fromFile(Paths.get(imageFilePath));
 
         try (Model model = Models.getModel()) { // empty model instance
             // load the model
@@ -52,6 +55,7 @@ public class Inference {
                 // holds the probability score per label
                 Classifications predictResult = predictor.predict(img);
                 System.out.println(predictResult);
+                return predictResult;
             }
         }
     }
