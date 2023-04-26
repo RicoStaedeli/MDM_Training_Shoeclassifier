@@ -29,7 +29,7 @@ public class Inference {
 
     }
 
-    public Classifications predict(byte[] image) throws IOException, ModelException, TranslateException {
+    public String predict(byte[] image) throws IOException, ModelException, TranslateException {
         InputStream is = new ByteArrayInputStream(image);
         BufferedImage bi = ImageIO.read(is);
         Image img = ImageFactory.getInstance().fromImage(bi);
@@ -54,8 +54,8 @@ public class Inference {
             try (Predictor<Image, Classifications> predictor = model.newPredictor(translator)) {
                 // holds the probability score per label
                 Classifications predictResult = predictor.predict(img);
-                System.out.println(predictResult);
-                return predictResult;
+                System.out.println(predictResult.toString());
+                return predictResult.toJson();
             }
         }
     }

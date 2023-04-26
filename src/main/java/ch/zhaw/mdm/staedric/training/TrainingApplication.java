@@ -43,6 +43,7 @@ public class TrainingApplication {
 	private static final int EPOCHS = 2;
 
 	public static void main(String[] args) throws IOException, TranslateException, MalformedModelException {
+		SpringApplication.run(TrainingApplication.class, args);
 
 		/*
 		 * ------------------- Aufruf des trainierten Models ----------------------------
@@ -53,7 +54,7 @@ public class TrainingApplication {
 
 
 		 //------------Training Model-----------------
-		SpringApplication.run(TrainingApplication.class, args);
+/* 
 		// the location to save the model
 		Path modelDir = Paths.get("models");
 		// create ImageFolder dataset from directory
@@ -90,7 +91,7 @@ public class TrainingApplication {
 			// save labels into model directory
 			Models.saveSynset(modelDir, dataset.getSynset());
 
-		}
+		}*/
 	}
 
 	private static ImageFolder initDataset(String datasetRoot)
